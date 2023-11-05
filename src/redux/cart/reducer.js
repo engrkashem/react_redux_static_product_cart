@@ -24,16 +24,24 @@ const reducer=(state=initialState,action)=>{
         case ADDCARTQTY:
             return state.map(product=>{
                 if(product.id === action.payload){
-                    product.details.qty = product.details.qty +1
+                    return{
+                        ...product,
+                        qty:product.qty + 1
+                    }
                 }
+                return product
             });
 
 
         case DEDUCTCARTQTY:
             return state.map(product=>{
                 if(product.id === action.payload){
-                    product.details.qty = product.details.qty -1
+                    return{
+                        ...product,
+                        qty:product.qty - 1
+                    }
                 }
+                return product
             });
 
 
