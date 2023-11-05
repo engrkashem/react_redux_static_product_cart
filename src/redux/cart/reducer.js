@@ -4,10 +4,21 @@ import { initialState } from "./initialState";
 const reducer=(state=initialState,action)=>{
     switch (action.type) {
         case ADDTOCART:
-            return[
-                ...state,
-                action.payload
-            ];
+            if(state.length==0){
+                return[
+                    ...state,
+                    action.payload
+                ];
+            }
+            return state.map(product=>{
+                if(product.id === action.payload.id){
+                    return {
+                        ...product,
+                        qty:product.qty+1
+                    }
+                }
+                return product
+            });
 
 
         case ADDCARTQTY:
