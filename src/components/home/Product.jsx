@@ -1,31 +1,35 @@
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/cart/actions";
 import { deductQty } from "../../redux/products/actions";
+import { addAmount } from "../../redux/bills/actions";
 
 // https://i.dummyjson.com/data/products/59/thumbnail.jpg
 const Product = ({ product }) => {
-  const dispatch = useDispatch();
-  const { name, category, price, qty } = product.details;
+  // const cartProducts = useSelector((state) => state.cart);
+  // console.log(cartProducts);
 
-  const addToCartHandler = (product) => {
+  const dispatch = useDispatch();
+  const { name, category, price, qty, imgUrl } = product.details;
+
+  const addToCartHandler = (productID) => {
     const cartProductObj = {
-      id: product.id,
-      name: product.details.name,
-      category: product.details.category,
-      price: product.details.price,
+      id: productID,
+      name,
+      category,
+      price,
       qty: 1,
+      imgUrl,
     };
+    // console.log(cartProductObj);
     dispatch(addToCart(cartProductObj));
-    dispatch(deductQty(product.id));
+    dispatch(deductQty(productID));
+    dispatch(addAmount(price));
   };
+  // console.log(cartProducts);
 
   return (
     <div className="lws-productCard">
-      <img
-        className="lws-productImage"
-        src="https://i.dummyjson.com/data/products/59/thumbnail.jpg"
-        alt="product"
-      />
+      <img className="lws-productImage" src={imgUrl} alt="product" />
       <div className="p-4 space-y-2">
         <h4 className="lws-productName">{name}</h4>
         <p className="lws-productCategory">{category}</p>
@@ -38,7 +42,7 @@ const Product = ({ product }) => {
           </p>
         </div>
         <button
-          onClick={() => addToCartHandler(product)}
+          onClick={() => addToCartHandler(product.id)}
           className="lws-btnAddToCart"
         >
           Add To Cart

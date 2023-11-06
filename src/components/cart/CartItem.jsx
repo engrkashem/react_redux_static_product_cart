@@ -5,27 +5,31 @@ import {
   deleteFromCart,
 } from "../../redux/cart/actions";
 import { addQty, deductQty } from "../../redux/products/actions";
+import { addAmount, deductAmount } from "../../redux/bills/actions";
 
 const CartItem = ({ cartProduct }) => {
   const dispatch = useDispatch();
 
-  const { id, name, category, price, qty, imgUrl } = cartProduct;
+  const { name, category, price, qty, imgUrl } = cartProduct;
 
-  const addQtyToCartHandler = (productId) => {
-    dispatch(addCartQty(productId));
-    dispatch(deductQty(productId));
+  const addQtyToCartHandler = (cartProduct) => {
+    dispatch(addCartQty(cartProduct.id));
+    dispatch(deductQty(cartProduct.id));
+    dispatch(addAmount(cartProduct.price));
   };
 
-  const removeQtyfromCartHandler = (productId) => {
-    dispatch(deductCartQty(productId));
-    dispatch(addQty(productId));
+  const removeQtyfromCartHandler = (cartProduct) => {
+    dispatch(deductCartQty(cartProduct.id));
+    dispatch(addQty(cartProduct.id));
+    dispatch(deductAmount(cartProduct.price));
   };
 
-  const deleteProductfromcart = (productId) => {
-    dispatch(deleteFromCart(productId));
-    dispatch(addQty(productId));
+  const deleteProductfromcart = (cartProduct) => {
+    dispatch(deleteFromCart(cartProduct.id));
+    dispatch(addQty(cartProduct.id));
+    dispatch(deductAmount(cartProduct.price));
   };
-
+  // console.log(imgUrl);
   return (
     <div className="space-y-6">
       {/*  Cart Item  */}
@@ -46,14 +50,14 @@ const CartItem = ({ cartProduct }) => {
           {/*  amount buttons */}
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => addQtyToCartHandler(id)}
+              onClick={() => addQtyToCartHandler(cartProduct)}
               className="lws-incrementQuantity"
             >
               <i className="text-lg fa-solid fa-plus"></i>
             </button>
             <span className="lws-cartQuantity">{qty}</span>
             <button
-              onClick={() => removeQtyfromCartHandler(id)}
+              onClick={() => removeQtyfromCartHandler(cartProduct)}
               className="lws-decrementQuantity"
             >
               <i className="text-lg fa-solid fa-minus"></i>
@@ -67,7 +71,7 @@ const CartItem = ({ cartProduct }) => {
         {/*  delete button  */}
         <div className="flex items-center justify-center col-span-2 mt-4 md:justify-end md:mt-0">
           <button
-            onClick={() => deleteProductfromcart(id)}
+            onClick={() => deleteProductfromcart(cartProduct)}
             className="lws-removeFromCart"
           >
             <i className="text-lg text-red-400 fa-solid fa-trash"></i>

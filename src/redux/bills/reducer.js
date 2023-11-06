@@ -7,7 +7,8 @@ const reducer = (state=initialState, action) =>{
         case ADDAMOUNT:
             return{
                 ...state,
-                subTotal:state.subTotal + action.payload
+                subTotal:state.subTotal + parseFloat(action.payload),
+                total:state.total+ parseFloat(action.payload)
             };
 
 
@@ -15,7 +16,8 @@ const reducer = (state=initialState, action) =>{
 
             return{
                 ...state,
-                subTotal:state.subTotal==0?action.payload:state.subTotal-action.payload
+                subTotal:(state.subTotal <=0 || state.subTotal<parseFloat(action.payload))?0:state.subTotal-parseFloat(action.payload),
+                total:(state.total <=0 || state.total<parseFloat(action.payload))?0:state.total-parseFloat(action.payload),
             };
 
     
